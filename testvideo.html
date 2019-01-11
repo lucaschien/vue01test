@@ -5,7 +5,7 @@
     <title>GET VIDEO</title>
     <meta charset="utf-8" />
     <style>
-      #videoBtn {
+      #startVideobtn {
         font-size: 20px;
         padding: 20px;
         border: 0px solid #ccc;
@@ -13,10 +13,34 @@
         border-radius: 0;
         background-color: red;
       }
+      #imgPreview {
+        max-width: 80%;
+        margin: 20px auto;
+        display: block;
+      }
+      
+      #imgFile {
+        display: none;
+      }
+
+      /* #videoBtn {
+        font-size: 20px;
+        padding: 20px;
+        border: 0px solid #ccc;
+        color: #fff;
+        border-radius: 0;
+        background-color: red;
+      } */
     </style>
   </head>
   <body>
-    <input
+    <button id="startVideobtn" onclick="startCapture()">照相</button>
+    <input type="file" accept="image/*" capture="camera" id="imgFile" onchange="changeFileFn(event)"/>
+    <hr>
+    <img src="" id="imgPreview" />
+
+
+    <!-- <input
       id="videoBtn"
       type="button"
       title="开启摄像头"
@@ -25,9 +49,31 @@
     />
     <video id="video" width="500px" height="500px" autoplay="autoplay"></video>
     <canvas id="canvas" width="500px" height="500px"></canvas>
-    <button id="snap" onclick="takePhoto()">拍照</button>
+    <button id="snap" onclick="takePhoto()">拍照</button> -->
+
     <script>
-      function getMedia() {
+      var base64Datas;
+      var $imgFile = document.getElementById("imgFile");
+      var $iimgPreview = document.getElementById("imgPreview");
+
+      function changeFileFn (e) {
+        e.preventDefault();
+        var data = e.target.files[0];
+        var reader = new FileReader();
+        reader.onload = function(theFile){
+          base64Datas = theFile.target.result;
+          //alert(base64Datas);
+          $iimgPreview.src = base64Datas;
+        };
+        reader.readAsDataURL(data);
+      }
+
+      function startCapture() {
+        $imgFile.click();
+      }
+
+      //以下是很舊的方法,在ios或新的手機都不支援了
+      /* function getMedia() {
         let constraints = {
           video: { facingMode: "user" },
           audio: false
@@ -46,7 +92,7 @@
           video.srcObject = MediaStream;
           video.play();
         }).catch(function(err) {
-          /* handle the error */
+          // handle the error
           alert(err);
         });
       }
@@ -57,7 +103,7 @@
         let canvas = document.getElementById("canvas");
         let ctx = canvas.getContext("2d");
         ctx.drawImage(video, 0, 0, 500, 500);
-      }
+      } */
     </script>
   </body>
 </html>
